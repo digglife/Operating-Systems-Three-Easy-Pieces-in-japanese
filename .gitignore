@@ -1,6 +1,5 @@
 # Generated EPUB and Python bytecode
-/ostep-ja.epub
-/ostep-ja-vertical.epub
+/epub/*.epub
 __pycache__/
 
 # Windows thumbnail cache files

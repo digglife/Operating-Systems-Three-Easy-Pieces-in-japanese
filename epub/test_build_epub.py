@@ -1,4 +1,4 @@
-"""Run with: python3 -m unittest test_build_epub.py"""
+"""Run with: python3 epub/test_build_epub.py"""
 
 import posixpath
 import shutil
@@ -29,10 +29,13 @@ class EpubBuildTests(unittest.TestCase):
         self.assertIn("[← 次章](#chapter-02)", vertical_book)
         self.assertIn("[前章 →](#chapter-01)", vertical_book)
 
-    def test_vertical_default_output(self):
-        with patch("sys.argv", ["build_epub.py", "--vertical"]), patch.object(build_epub, "build") as build:
-            self.assertEqual(build_epub.main(), 0)
-        build.assert_called_once_with(build_epub.ROOT / "ostep-ja-vertical.epub", "pandoc", True)
+    def test_default_outputs(self):
+        for args, filename, vertical in (([], "ostep-ja.epub", False),
+                                         (["--vertical"], "ostep-ja-vertical.epub", True)):
+            with self.subTest(vertical=vertical):
+                with patch("sys.argv", ["build_epub.py", *args]), patch.object(build_epub, "build") as build:
+                    self.assertEqual(build_epub.main(), 0)
+                build.assert_called_once_with(build_epub.EPUB_DIR / filename, "pandoc", vertical)
 
     @unittest.skipUnless(shutil.which("pandoc"), "Pandoc is not installed")
     def test_epub_package_and_all_local_links(self):

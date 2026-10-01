@@ -2,8 +2,8 @@
 """Build the Japanese OSTEP translation as a navigable EPUB 3.
 
 Requires Pandoc 3.x (https://pandoc.org/installing.html). Run from any directory:
-    python3 build_epub.py                       # horizontal (default)
-    python3 build_epub.py --vertical            # traditional Japanese layout
+    python3 epub/build_epub.py                       # horizontal (default)
+    python3 epub/build_epub.py --vertical            # traditional Japanese layout
 """
 
 from __future__ import annotations
@@ -16,7 +16,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+EPUB_DIR = Path(__file__).resolve().parent
+ROOT = EPUB_DIR.parent
 TITLE = "Operating Systems: Three Easy Pieces"
 AUTHORS = ("Remzi H. Arpaci-Dusseau", "Andrea C. Arpaci-Dusseau")
 PART = re.compile(r"^# (第\d+部 .+)$")
@@ -170,11 +171,11 @@ def build(output: Path, pandoc: str, vertical: bool = False) -> None:
         "--epub-title-page=true", "--metadata=lang:ja",
         f"--metadata=title:{TITLE}",
         *(f"--metadata=author:{author}" for author in AUTHORS),
-        f"--css={ROOT / 'epub.css'}",
+        f"--css={EPUB_DIR / 'epub.css'}",
     ]
     if vertical:
         # The second stylesheet overrides only layout, leaving typography shared.
-        command.extend([f"--css={ROOT / 'epub-vertical.css'}",
+        command.extend([f"--css={EPUB_DIR / 'epub-vertical.css'}",
                         "--metadata=page-progression-direction:rtl"])
     command.extend([f"--output={output}", "-"])
     # Input is piped: no generated Markdown or copied figures are left in the repo.
@@ -185,12 +186,12 @@ def build(output: Path, pandoc: str, vertical: bool = False) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path,
-                        help="EPUB path (default: ostep-ja.epub or ostep-ja-vertical.epub)")
+                        help="EPUB path (default: epub/ostep-ja.epub or epub/ostep-ja-vertical.epub)")
     parser.add_argument("--vertical", action="store_true",
                         help="Japanese vertical right-to-left layout and page progression")
     parser.add_argument("--pandoc", default="pandoc", help="Pandoc executable (default: pandoc)")
     args = parser.parse_args()
-    output = args.output or ROOT / ("ostep-ja-vertical.epub" if args.vertical else "ostep-ja.epub")
+    output = args.output or EPUB_DIR / ("ostep-ja-vertical.epub" if args.vertical else "ostep-ja.epub")
     try:
         build(output, args.pandoc, args.vertical)
     except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as error:

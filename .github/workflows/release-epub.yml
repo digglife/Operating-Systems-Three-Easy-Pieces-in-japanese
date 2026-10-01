@@ -1,0 +1,45 @@
+name: Build EPUB release assets
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  epub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the released tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '3.8.3'
+
+      - name: Test EPUBs
+        run: python3 epub/test_build_epub.py
+
+      - name: Build release EPUBs
+        run: |
+          python3 epub/build_epub.py
+          python3 epub/build_epub.py --vertical
+
+      - name: Attach EPUBs to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release upload "$RELEASE_TAG" \
+            epub/ostep-ja.epub epub/ostep-ja-vertical.epub \
+            --clobber --repo "$GITHUB_REPOSITORY"
