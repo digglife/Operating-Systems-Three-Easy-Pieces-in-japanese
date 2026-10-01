@@ -1,0 +1,24 @@
+/* Overrides for traditional Japanese tategaki. The OPF spine also specifies
+   page-progression-direction=rtl, so page turns follow the writing direction. */
+html, body {
+  -epub-writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+/* Code, diagrams and formulas contain horizontal Latin text. Keep these as
+   horizontal islands instead of rotating the content or squeezing each letter. */
+pre, div.sourceCode, figure, table, math {
+  -epub-writing-mode: horizontal-tb;
+  -webkit-writing-mode: horizontal-tb;
+  writing-mode: horizontal-tb;
+}
+pre {
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+img {
+  max-width: 90vw;
+  max-height: 90vh;
+}

@@ -1,0 +1,44 @@
+/* Horizontal Japanese layout: technical prose, English terms, code and wide diagrams
+   remain readable together. Respect the reader's font-size and theme preferences. */
+html { -epub-writing-mode: horizontal-tb; writing-mode: horizontal-tb; }
+body {
+  font-family: "Noto Serif CJK JP", "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", serif;
+  line-height: 1.8;
+  text-align: start;
+  word-break: normal;
+  overflow-wrap: break-word;
+  line-break: strict;
+  orphans: 2;
+  widows: 2;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Noto Sans CJK JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+  line-height: 1.4;
+  break-after: avoid;
+  page-break-after: avoid;
+}
+h1 { margin-block: 1.6em 1em; }
+h2 { margin-block: 1.4em 0.8em; }
+h3 { margin-block: 1.2em 0.5em; }
+p { margin-block: 0.7em; }
+blockquote {
+  margin-inline: 0.7em 0;
+  padding-inline-start: 0.9em;
+  border-inline-start: 0.2em solid #888;
+}
+blockquote blockquote { margin-inline-start: 0; }
+code, pre {
+  font-family: "SFMono-Regular", "Noto Sans Mono CJK JP", "DejaVu Sans Mono", monospace;
+  font-size: 0.88em;
+  line-height: 1.5;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 0.6em;
+  border: 1px solid #aaa;
+}
+img { max-width: 100%; height: auto; object-fit: contain; }
+figure { margin-inline: 0; text-align: center; }
+figure figcaption { font-size: 0.9em; }
+a { overflow-wrap: anywhere; }

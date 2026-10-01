@@ -5,6 +5,22 @@
 はじめに  
 Operating Systems Three Easy Piecesと言われているものを日本語に翻訳しました。この本（サイト）では現代のOSに至るまでの歴史を一つずつ辿っていき、どうして今のような実装になっているかを教えてくれるような本になっています。OSがよくわかっていなくて知りたい方、現代のOSを改造したい方、応用分野でOSのモデル化をしたい方にお勧めです。また、この本の参考文献のほとんどが論文からの引用だったりするので詳しい実装を知りたい方などにもおすすめです。
 
+## EPUB を作成する
+
+[Pandoc 3.x](https://pandoc.org/installing.html) と Python 3.10 以降を用意し、リポジトリのルートで実行します（Python パッケージの追加は不要です）。
+
+```sh
+python3 build_epub.py
+# 縦書き（右から左にページをめくる）
+python3 build_epub.py --vertical
+# 保存先を変える場合（縦書きにも指定できます）
+python3 build_epub.py --output ~/Books/ostep-ja.epub
+# ビルドの検証
+python3 -m unittest test_build_epub.py
+```
+
+既定の出力は横書きの `ostep-ja.epub` です。`--vertical` を付けると縦書きの `ostep-ja-vertical.epub` を別に作成します。縦書きでもコードや数式は横書きのまま表示し、図は端末の画面内に収めます。`README.md` の掲載順に章を収録し、EPUB の目次から各部・章・節へ移動できます。章末には前章・次章へのリンクを付けています。文字サイズや配色はリーダー側から変更できます。図は EPUB に同梱されます。
+
 # 第1部 Virtualization
 ## 1. [A Dialogue on the Book](./01/01.md)
 ## 2. [Introduction to Operating Systems](./02/02.md)
